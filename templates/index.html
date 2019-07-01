@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}TITLE GOES HERE{% endblock %}
+
+
+{% block content %}
+<h1> All Cupcakes</h1>
+<div id="cupcakes_container">
+
+
+</div><br>
+
+<h3>Submit a new cupcake!</h3>
+<form id="add_cupcake_form"> 
+    Flavor: <input required type="text" id="flavor" placeholder="Flavor"><br>
+    Size: <input required type="text" id="size" placeholder="Size"><br>
+    Rating: <input required type="number" id="rating" placeholder="10"><br>
+    Image: <input type="url" id="image" placeholder="Image URL"><br>
+    <button id="button" type="submit">Submit</button>
+</form>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 """Cupcakes application."""
 
-from flask import Flask, request, redirect, jsonify
+from flask import Flask, request, redirect, jsonify, render_template
 from models import db, connect_db, Cupcake
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -21,7 +21,9 @@ db.create_all()
 @app.route('/')
 def landing_page():
     """landing page redirecting to list of all cupcakes"""
-    return redirect('/cupcakes')
+    # cupcakes = Cupcake.query.all()
+    # serialized_cupcakes = [cupcake.serialized() for cupcake in cupcakes]
+    return render_template('/index.html')
 
 
 @app.route('/cupcakes')

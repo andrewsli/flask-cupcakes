@@ -29,13 +29,7 @@ def list_cupcakes():
     """returns list of all cupcakes as object through json"""
     cupcakes = Cupcake.query.all()
 
-    serialized_cupcakes = [{
-        "id": cupcake.id,
-        "flavor": cupcake.flavor,
-        "size": cupcake.size,
-        "rating": cupcake.rating,
-        "image": cupcake.image,
-    } for cupcake in cupcakes]
+    serialized_cupcakes = [cupcake.serialized() for cupcake in cupcakes]
 
     return jsonify(response=serialized_cupcakes)
 
@@ -45,50 +39,40 @@ def create_cupcake():
     """creates cupcake instance from posted data, adds cupcake to database,
     returns data on added cupcake in json form
     """
-    flavor = request.json["flavor"]
-    size = request.json["size"]
-    rating = request.json["rating"]
-    image = request.json["image"]
-
-    cupcake = Cupcake(flavor=flavor, size=size, rating=rating, image=image)
+    data = request.json
+    cupcake = Cupcake(
+        flavor=data["flavor"],
+        size=data["size"],
+        rating=data["rating"],
+        image=data["image"] or None,
+        )
 
     db.session.add(cupcake)
     db.session.commit()
 
-    serialized_cupcake = {
-        "id": cupcake.id,
-        "flavor": cupcake.flavor,
-        "size": cupcake.size,
-        "rating": cupcake.rating,
-        "image": cupcake.image,
-    }
+    return jsonify(response=cupcake.serialized())
 
-    return jsonify(response=serialized_cupcake)
+
+@app.route("/cupcakes/<int:cupcake_id>")
+def show_cupcake(cupcake_id):
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+
+    return jsonify(response=cupcake.serialized())
 
 
 @app.route('/cupcakes/<int:cupcake_id>', methods=['PATCH'])
 def update_cupcake(cupcake_id):
     """update cupcake"""
-    flavor = request.json["flavor"]
-    size = request.json["size"]
-    rating = request.json["rating"]
-    image = request.json["image"]
+    data = request.json
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
-    cupcake.flavor = flavor
-    cupcake.size = size
-    cupcake.rating = rating
-    cupcake.image = image or None
+    cupcake.flavor = data["flavor"]
+    cupcake.size = data["size"]
+    cupcake.rating = data["rating"]
+    cupcake.image = data["image"] or None
     db.session.commit()
 
-    serialized_cupcake = {
-        "id": cupcake.id,
-        "flavor": cupcake.flavor,
-        "size": cupcake.size,
-        "rating": cupcake.rating,
-        "image": cupcake.image,
-    }
-    return jsonify(response=serialized_cupcake)
+    return jsonify(response=cupcake.serialized())
 
 
 @app.route('/cupcakes/<int:cupcake_id>', methods=["DELETE"])

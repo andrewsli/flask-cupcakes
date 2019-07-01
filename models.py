@@ -44,3 +44,14 @@ class Cupcake(db.Model):
         db.Text,
         default=DEFAULT_IMAGE,
     )
+
+    def serialized(self):
+        serialized_cupcake = {
+            "id": self.id,
+            "flavor": self.flavor,
+            "size": self.size,
+            "rating": self.rating,
+            "image": self.image,
+        }
+
+        return serialized_cupcake

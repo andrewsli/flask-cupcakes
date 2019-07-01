@@ -18,7 +18,7 @@ class Cupcake(db.Model):
 
     def __repr__(self):
         x = self
-        return f"<Cupcake {x.id}: {x.flavor} {x.size} {x.rating}>"
+        return f"<Cupcake {x.id}: {x.size} {x.flavor}. Rating: {x.rating}>"
 
     __tablename__ = "cupcakes"
 
